@@ -1,5 +1,6 @@
 package br.com.wanderlei.controller;
 
+import br.com.wanderlei.BookRepository;
 import br.com.wanderlei.environment.InstanceInformationService;
 import br.com.wanderlei.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,22 @@ public class BookController {
     @Autowired
     private InstanceInformationService informationService;
 
+    @Autowired
+    private BookRepository repository;
+
     //http://localhost:8100/book-service/1/BRL
     @GetMapping(value="/{id}/{currency}", produces = MediaType.APPLICATION_JSON_VALUE )
     public Book findBook(
             @PathVariable("id") Long id,
             @PathVariable("currency") String currency
     ) {
-        return new Book();
+        String port = informationService.retrieverServerPort ();
+        var book = repository.findById(id).orElseThrow();
+
+        book.setEnvironment (port);
+        book.setCurrency (currency);
+
+        return book;
     }
 
 }
