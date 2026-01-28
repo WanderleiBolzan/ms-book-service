@@ -8,6 +8,8 @@ resilience4j:
     instances:
       foo-bar:
         max-attempts: 7
+        wait-duration: 1s
+        enable-exponential-backoff: true
 spring:
   application:
     name: book-service
