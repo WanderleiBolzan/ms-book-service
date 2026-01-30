@@ -1,14 +1,21 @@
 server:
   port: 8100
-eureka-client:
-  service-url:
-    defaultZone: http://localhost:8761/eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 resilience4j:
   ratelimiter:
     instances:
       default:
         limit-for-period: 2
         limit-refresh-period: 10s
+  bulkhead:
+    instances:
+      default:
+        max-concurrent-calls: 10
+      foo-bar:
+        max-concurrent-calls: 20
   retry:
     instances:
       foo-bar:
@@ -19,7 +26,7 @@ spring:
   application:
     name: book-service
   datasource:
-    drive-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/book_service
     username: wjb
     password: Nazlob4991@
@@ -35,3 +42,4 @@ springdoc:
     path: /book-service/v3/api-docs
   swagger-ui:
     url: /book-service/v3/api-docs
+  override-server-url: true
